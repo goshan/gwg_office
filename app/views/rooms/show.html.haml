@@ -1,0 +1,46 @@
+#room_id
+  房间ID：
+  = @room.id
+#room_name
+  房间名称：
+  = @room.name
+#room_status
+  房间状态：
+  = @room.status
+#room_players
+  房间玩家：
+  %table
+    - @room.players.each do |player|
+      %tr
+        %td= player.id
+        %td= player.nick_name
+        %td= player.win_count
+        %td= player.loss_count
+
+#params
+  #current_user_id.hidden= current_user.id
+  #current_room_id.hidden= @room.id
+
+:javascript
+  var socket = new WebSocket("ws://0.0.0.0:4040");
+  socket.onmessage = function(res){ 
+    console.log(res.data);
+
+    json = JSON.parse(res.data);
+    if (json['action'] == "user enter room"){
+        var room_id = $('#current_room_id').text();
+        if (room_id == json['room_id']){
+            $('#room_players table').append("<tr><td>"+json['user_id']+"</td><td>"+json['user_name']+"</td><td>"+json['user_win_cnt']+"</td><td>"+json['user_lose_cnt']+"</td></tr>")
+        }
+    }
+  }
+
+  socket.onopen = function(event){ 
+    var current_user_id = $('#current_user_id').text();
+    var room_id = $('#current_room_id').text();
+    var request = JSON.stringify({engin: "socket", action: "register", user_id: current_user_id});
+    socket.send(request);
+
+    request = JSON.stringify({engin: "room", action: "enter", room_id: room_id});
+    socket.send(request);
+  }

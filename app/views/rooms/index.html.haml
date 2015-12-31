@@ -1,0 +1,11 @@
+%table
+  - @rooms.each do |room|
+    %tr
+      %td= room.id
+      %td= room.name
+      %td= "#{room.players.count} / 2"
+      %td= room.status
+      %td= link_to "join", join_room_path(room.id)
+
+= form_tag rooms_path, :method => "post" do
+  = submit_tag "+"

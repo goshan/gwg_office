@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :rooms do
 	  member do 
 		  get 'join'
+		  get 'unjoin'
 	  end
   end
 

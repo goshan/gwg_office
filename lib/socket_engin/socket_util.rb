@@ -25,7 +25,7 @@ class SocketUtil
 			if json[:engin] == "socket" && json[:action] == "register"
 				SocketManager.bind_socket json[:user_id].to_i, ws
 			elsif SOCKET_FILTER.keys.include?(engin) && SOCKET_FILTER[engin].include?(json[:action])
-				json[:current_user_id] = SocketManager.user_by_socket ws
+				json[:user_id] = SocketManager.user_by_socket ws
 				"#{json[:engin].capitalize}Engin".constantize.send(json[:action], json)
 			else
 				response = JSON.generate({:status => 'error', :error => "unsupport engin or action"})
@@ -36,7 +36,20 @@ class SocketUtil
 		def send_message(json, user_id)
 			msg = JSON.generate json
 			ws = SocketManager.socket_by_user user_id
-			ws.send msg if ws
+			if ws
+				ws.send msg
+				puts "send message to user: #{user_id} with signature: #{ws.signature}: #{json}"
+			else
+				puts "send message failed for no socket found. user: #{user_id}, json: #{json}"
+			end
+		end
+		
+		def broadcast_message(json)
+			msg = JSON.generate json
+			SocketManager.all_sockets.each do |ws|
+				ws.send msg
+			end
+			puts "broadcast to all sockets: #{json}"
 		end
 	end
 	

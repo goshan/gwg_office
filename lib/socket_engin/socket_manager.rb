@@ -21,6 +21,11 @@ class SocketManager
 			@@signature_player.delete signature
 		end
 
+		def all_sockets
+			@@player_socket.values
+		end
+
+		# transport between user and socket
 		def socket_by_user(user_id)
 			@@player_socket[user_id]
 		end

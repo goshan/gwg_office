@@ -10,8 +10,36 @@ class Room < CacheModel
 	end
 
 	def join_user(user)
-		@players << user
-		self.save!
+		existed = nil
+		self.players.each do |player|
+			if player.id == user.id
+				existed = true
+				break
+			end
+		end
+
+		if existed
+			puts "[Model Error] room has included this player"
+		else
+			@players << user
+			self.save!
+		end
+	end
+
+	def unjoin_user(user)
+		deleted = nil
+		self.players.each_with_index do |player, index|
+			if player.id == user.id
+				self.players.delete_at index
+				deleted = true
+			end
+		end
+
+		if deleted
+			self.save!
+		else
+			puts "[Model Error] room not include this player"
+		end
 	end
 
 	def include_user?(user)

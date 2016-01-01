@@ -22,4 +22,11 @@ class RoomsController < ApplicationController
 		room.join_user current_user
 		redirect_to room_path(room.id)
 	end
+
+	def unjoin
+		room = Room.find_by_id params[:id]
+		raise ActionController::RoutingError.new("user not in this room") unless room.include_user? current_user
+		room.unjoin_user current_user
+		redirect_to rooms_path
+	end
 end

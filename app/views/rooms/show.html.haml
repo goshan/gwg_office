@@ -1,3 +1,4 @@
+#rooms_show
 #room_id
   房间ID：
   = @room.id
@@ -16,45 +17,9 @@
         %td= player.nick_name
         %td= player.win_count
         %td= player.loss_count
+#start_game_button.hidden= link_to "开始游戏", game_room_path
 #leave_room_button= link_to "离开房间", unjoin_room_path
 
 #params
   #current_user_id.hidden= current_user.id
   #current_room_id.hidden= @room.id
-
-:javascript
-  var socket = new WebSocket("ws://0.0.0.0:4040");
-  socket.onmessage = function(res){ 
-    console.log(res.data);
-
-    json = JSON.parse(res.data);
-    if (json['action'] == "user enter room"){
-        var room_id = $('#current_room_id').text();
-        var current_user_id = $('#current_user_id').text();
-        if (room_id == json['room_id'] && current_user_id != json['user_id']){
-          $('#room_players table').append("<tr id='room_player_id_"+json['user_id']+"'><td>"+json['user_id']+"</td><td>"+json['user_name']+"</td><td>"+json['user_win_cnt']+"</td><td>"+json['user_lose_cnt']+"</td></tr>")
-        }
-    }
-    else if (json['action'] == "user leave room"){
-        var room_id = $('#current_room_id').text();
-        if (room_id == json['room_id']){
-            $('#room_player_id_'+json['user_id']).remove();
-        }
-    }
-  }
-
-  socket.onopen = function(event){ 
-    var current_user_id = $('#current_user_id').text();
-    var room_id = $('#current_room_id').text();
-    var request = JSON.stringify({engin: "socket", action: "register", user_id: current_user_id});
-    socket.send(request);
-
-    request = JSON.stringify({engin: "room", action: "enter", room_id: room_id});
-    socket.send(request);
-  }
-
-  $('#leave_room_button').on('click', function(){
-    var room_id = $('#current_room_id').text();
-    request = JSON.stringify({engin: "room", action: "leave", room_id: room_id});
-    socket.send(request);
-  });

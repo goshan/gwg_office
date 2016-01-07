@@ -6,8 +6,8 @@ class RoomsController < ApplicationController
 	def create
 		room = Room.new
 		room.name = "#{current_user.nick_name}的房间"
-		room.players << current_user
 		room.save!
+		room.join_user current_user
 		redirect_to room_path(room.id)
 	end
 	
@@ -28,5 +28,11 @@ class RoomsController < ApplicationController
 		raise ActionController::RoutingError.new("user not in this room") unless room.include_user? current_user
 		room.unjoin_user current_user
 		redirect_to rooms_path
+	end
+
+	def game
+		room = Room.find_by_id params[:id]
+		raise ActionController::RoutingError.new("user not in this room") unless room.include_user? current_user
+		room.start_game
 	end
 end

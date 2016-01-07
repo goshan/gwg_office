@@ -21,7 +21,8 @@ class Room < CacheModel
 		if existed
 			puts "[Model Error] room has included this player"
 		else
-			@players << user
+			self.class.unjoin_all_rooms user
+			self.players << user
 			self.save!
 		end
 	end
@@ -36,7 +37,11 @@ class Room < CacheModel
 		end
 
 		if deleted
-			self.save!
+			if self.empty?
+				self.destroy
+			else
+				self.save!
+			end
 		else
 			puts "[Model Error] room not include this player"
 		end
@@ -44,6 +49,21 @@ class Room < CacheModel
 
 	def include_user?(user)
 		@players.include? user
+	end
+
+	def empty?
+		self.players.blank?
+	end
+
+	def self.unjoin_all_rooms(user)
+		self.find_all.each do |room|
+			room.unjoin_user user if room.include_user? user
+		end
+	end
+
+	def start_game
+		self.status = STATUS_GAMING
+		self.save!
 	end
 
 	# for cache transport func

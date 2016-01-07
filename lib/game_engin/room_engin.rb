@@ -15,13 +15,12 @@ class RoomEngin
 			SocketUtil.broadcast_message json
 		end
 
-
-		def send_msg_not_user(room, user, json)
-			room.players.each do |player|
-				unless player.id == user.id
-					SocketUtil.send_message(json, player.id)
-				end
-			end
+		def start_game(params)
+			puts params.inspect
+			room = Room.find_by_id params[:room_id]
+			user = User.find_by_id params[:user_id]
+			json = {:action => "user start game", :room_id => room.id}
+			SocketUtil.broadcast_message json
 		end
 	end
 end

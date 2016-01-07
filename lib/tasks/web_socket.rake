@@ -10,7 +10,13 @@ namespace :web_socket do
 
 				ws.onmessage do |msg|
 					puts "user with signature #{ws.signature} sent message #{msg}"
-					SocketUtil.parse_message msg, ws
+					begin
+						SocketUtil.parse_message msg, ws
+					rescue Exception => e
+						puts "============>> Exception <<============"
+						puts e.inspect
+						puts "===============>> End <<==============="
+					end
 				end
 
 				ws.onclose do 

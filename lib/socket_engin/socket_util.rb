@@ -1,7 +1,7 @@
 class SocketUtil
 
 	SOCKET_FILTER = {
-		:room => ["enter", "leave"]
+		:room => ["enter", "leave", "start_game"]
 	}
 
 	class << self

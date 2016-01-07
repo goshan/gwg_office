@@ -1,8 +1,9 @@
+#rooms_index
 %table
   - @rooms.each do |room|
     %tr
       %td= room.id
-      %td= room.name
+      %td= link_to room.name, room_path(room.id)
       %td= "#{room.players.count} / 2"
       %td= room.status
       %td= link_to "join", join_room_path(room.id)
@@ -12,25 +13,3 @@
 
 #params
   #current_user_id.hidden= current_user.id
-
-
-:javascript
-  var socket = new WebSocket("ws://0.0.0.0:4040");
-  socket.onmessage = function(res){ 
-    console.log(res.data);
-
-    json = JSON.parse(res.data);
-    if (json['action'] == "user enter room"){
-        window.location.reload();
-    }
-    else if (json['action'] == "user leave room"){
-        window.location.reload();
-    }
-  }
-
-  socket.onopen = function(event){ 
-    var current_user_id = $('#current_user_id').text();
-    var room_id = $('#current_room_id').text();
-    var request = JSON.stringify({engin: "socket", action: "register", user_id: current_user_id});
-    socket.send(request);
-  }

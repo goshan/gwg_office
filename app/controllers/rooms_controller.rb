@@ -31,8 +31,16 @@ class RoomsController < ApplicationController
 	end
 
 	def game
-		room = Room.find_by_id params[:id]
-		raise ActionController::RoutingError.new("user not in this room") unless room.include_user? current_user
-		room.start_game
+		@room = Room.find_by_id params[:id]
+		raise ActionController::RoutingError.new("user not in this room") unless @room.include_user? current_user
+		@room.start_game
+		
+		@map = []
+		file = File.new Rails.root.join "lib", "maps", "map.gcm"
+		while line = file.gets
+			line = line[0..-3].split ""
+			@map << line
+		end
+		file.close
 	end
 end

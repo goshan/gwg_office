@@ -1,4 +1,4 @@
-class RoomEngin
+class RoomEngin < Engin
 
 	class << self
 		def enter(params)
@@ -16,7 +16,6 @@ class RoomEngin
 		end
 
 		def start_game(params)
-			puts params.inspect
 			room = Room.find_by_id params[:room_id]
 			user = User.find_by_id params[:user_id]
 			json = {:action => "user start game", :room_id => room.id}

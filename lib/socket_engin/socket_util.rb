@@ -1,7 +1,8 @@
 class SocketUtil
 
 	SOCKET_FILTER = {
-		:room => ["enter", "leave", "start_game"]
+		:room => ["enter", "leave", "start_game"], 
+		:gamemanage => ["enter_game", "get_players"]
 	}
 
 	class << self
@@ -26,7 +27,9 @@ class SocketUtil
 				SocketManager.bind_socket json[:user_id].to_i, ws
 			elsif SOCKET_FILTER.keys.include?(engin) && SOCKET_FILTER[engin].include?(json[:action])
 				json[:user_id] = SocketManager.user_by_socket ws
-				"#{json[:engin].capitalize}Engin".constantize.send(json[:action], json)
+				if "#{json[:engin].capitalize}Engin".constantize.send("before_filter", json)
+					"#{json[:engin].capitalize}Engin".constantize.send(json[:action], json)
+				end
 			else
 				response = JSON.generate({:status => 'error', :error => "unsupport engin or action"})
 				ws.send(response)
@@ -43,7 +46,7 @@ class SocketUtil
 				puts "send message failed for no socket found. user: #{user_id}, json: #{json}"
 			end
 		end
-		
+
 		def broadcast_message(json)
 			msg = JSON.generate json
 			SocketManager.all_sockets.each do |ws|

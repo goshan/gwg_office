@@ -1,28 +1,27 @@
-#room_game
+= stylesheet_link_tag 'map'
+
+#rooms_game
 #cover
 #hero_pick
 #player1_candidates.candidate_heros
-    %div 玩家1
+  %div 玩家1
 #player2_candidates.candidate_heros
-    %div 玩家2
-#large_screen
-    #notification 消息：
-    #round 回合：
-    #turn 行动：
-    #player_list 玩家列表：
-    %a#ready{:href => "#"} Ready
+  %div 玩家2
+#status_screen
+  #round 回合：
+  玩家列表：
+  #players_list 
+#console
 %table#map
-    - file = File.new Rails.root.join "lib", "maps", "map.gcm"
-    - y = 0
-    - while line = file.gets
-        %tr{:pos => y}
-            - line = line[0..-3].split ""
-            - line.each_with_index do |c, i|
-                %td{:class => c, :pos => i}
-        - y += 1
-    - file.close
+  - @map.each_with_index do |line, y|
+    %tr{:pos => y}
+      - line.each_with_index do |e, x|
+        %td{:class => e, :pos => x}
 
 #menu.hidden
-    %a.attack{:href => "#"} Attack
-    %a.skill{:href =>"#"} GeziSkill
-    %a.standby{:href =>"#"} Standby
+  %a.attack{:href => "#"} Attack
+  %a.skill{:href =>"#"} GeziSkill
+  %a.standby{:href =>"#"} Standby
+
+#params
+  #current_user_id.hidden= current_user.id

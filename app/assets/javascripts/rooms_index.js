@@ -17,7 +17,6 @@ if ($("#rooms_index").length != 0){
 
 	socket.onopen = function(event){ 
 		var current_user_id = $('#current_user_id').text();
-		var room_id = $('#current_room_id').text();
 		var request = JSON.stringify({engin: "socket", action: "register", user_id: current_user_id});
 		socket.send(request);
 	}

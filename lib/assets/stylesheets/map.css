@@ -1,0 +1,163 @@
+/* hero pick */
+#cover{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+	background-color: gray;
+	display: block;
+	width: 1280px;
+	height: 620px;
+	opacity: 0.8;
+}
+#hero_pick{
+	position: absolute;
+	top: 150px;
+	left: 15px;
+	z-index: 100;
+	background-color: white;
+	width: 1250px;
+}
+#hero_pick a{
+	color: #638c0b;
+	display: inline-block;
+	text-decoration: none;
+	margin: 10px;
+	vertical-align: top;
+}
+a.disabled{
+	color: red;
+}
+#hero_pick a .avatar{
+	height: 50px;
+	width: 50px;
+}
+#hero_pick a .name{
+	display: inline-block;
+	font-size: 40px;
+	vertical-align: top;
+	margin-top: 5px;
+}
+#hero_pick a .info{
+	display: inline-block;
+	font-size: 18px;
+	vertical-align: top;
+	margin-top: 5px;
+	width: 150px;
+}
+#hero_pick a .skill{
+	margin-left: 60px;
+	font-size: 13px;
+}
+.candidate_heros{
+	position: absolute;
+	top: 15px;
+	z-index: 100;
+	background-color: #fafaf9;
+}
+#player1_candidates{
+	left: 300px;
+}
+#player2_candidates{
+	left: 750px;
+}
+.candidate_heros img{
+	height: 60px;
+	width: 60px;
+	margin: 5px;
+}
+
+
+#large_screen{
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	z-index: 100;
+	background-color: #fafaf9;
+	display: block;
+	width: 249px;
+	height: 123px;
+}
+
+/* land */
+.X{
+	background-color: #3e3833;
+}
+.T{
+	background-color: #eec659;
+}
+.O{
+	background-color: #fafaf9;
+}
+
+/* mouse */
+.wait_for_move{
+	background-color: red;
+}
+.wait_for_attack{
+	background-color: red;
+}
+.move_scope{
+	background-color: blue;
+}
+.attack_scope{
+	background-color: yellow;
+}
+
+/* player */
+.hero{
+	display: block;
+	width: 21px;
+	height: 21px;
+	margin-left: 2px;
+}
+.hero[player="1"]{
+	background-color: green;
+	position: relative;
+}
+.hero[player="2"]{
+	background-color: purple;
+	position: relative;
+}
+.hero img{
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	height: 17px;
+	width: 17px;
+}
+
+.health{
+	font-size: 11px;
+	position: absolute;
+	top: -10;
+	left: -5;
+	color: white;
+}
+.hero[player="1"] span{
+	background-color: #eb5555;
+}
+.hero[player="2"] span{
+	background-color: #34d9d5;
+}
+
+/* menu */
+#menu{
+	position: absolute;
+	background-color: gray;
+}
+#menu a{
+	display: block;
+}
+.hidden{
+	display: none;
+}
+
+
+td{
+	height: 25px;
+	width: 25px;
+}
+td:hover{
+	background-color: #ccc;
+}

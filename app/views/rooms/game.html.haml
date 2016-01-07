@@ -1,0 +1,28 @@
+#room_game
+#cover
+#hero_pick
+#player1_candidates.candidate_heros
+    %div 玩家1
+#player2_candidates.candidate_heros
+    %div 玩家2
+#large_screen
+    #notification 消息：
+    #round 回合：
+    #turn 行动：
+    #player_list 玩家列表：
+    %a#ready{:href => "#"} Ready
+%table#map
+    - file = File.new Rails.root.join "lib", "maps", "map.gcm"
+    - y = 0
+    - while line = file.gets
+        %tr{:pos => y}
+            - line = line[0..-3].split ""
+            - line.each_with_index do |c, i|
+                %td{:class => c, :pos => i}
+        - y += 1
+    - file.close
+
+#menu.hidden
+    %a.attack{:href => "#"} Attack
+    %a.skill{:href =>"#"} GeziSkill
+    %a.standby{:href =>"#"} Standby

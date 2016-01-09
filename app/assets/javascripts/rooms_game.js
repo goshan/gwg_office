@@ -1,5 +1,7 @@
 if ($('#rooms_game').length != 0){
-	print_console('进入对战服务器，等待其他玩家')
+	print_console('进入对战服务器，等待其他玩家');
+	init_player_id();
+	init_template();
 	open_socket('ws://0.0.0.0:4040');
 //	on_pick_hero();
 //	hero_pos_init();

@@ -13,6 +13,12 @@
 //= require jquery
 //= require jquery_ujs
 //
+//= require underscore
+//
+//= require global_variable
+//= require template
 //= require map
+//= require game
+//= require socket
 //
 //= require_tree .

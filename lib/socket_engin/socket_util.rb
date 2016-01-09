@@ -2,7 +2,7 @@ class SocketUtil
 
 	SOCKET_FILTER = {
 		:room => ["enter", "leave", "start_game"], 
-		:gamemanage => ["enter_game", "get_players"]
+		:game => ["enter_game", "get_players", "assign_heroes"]
 	}
 
 	class << self
@@ -34,6 +34,16 @@ class SocketUtil
 				response = JSON.generate({:status => 'error', :error => "unsupport engin or action"})
 				ws.send(response)
 			end
+		end
+
+		def close_socket(ws)
+			user = User.find_by_id SocketManager.user_by_socket(ws)
+			Room.find_all.each do |room|
+				if room.status == Room::STATUS_GAMING && room.include_user?(user)
+					GameEngin.stop_game({:room_id => room.id})
+				end
+			end
+			SocketManager.unbind_socket ws
 		end
 
 		def send_message(json, user_id)

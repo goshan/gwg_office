@@ -15,12 +15,14 @@ namespace :web_socket do
 					rescue Exception => e
 						puts "============>> Exception <<============"
 						puts e.inspect
+						response = JSON.generate({:status => "error", :error => "invalid request"})
+						ws.send(response)
 						puts "===============>> End <<==============="
 					end
 				end
 
 				ws.onclose do 
-					SocketManager.unbind_socket ws
+					SocketUtil.close_socket ws
 					puts "user with signature #{ws.signature} disconnected"
 				end
 			end

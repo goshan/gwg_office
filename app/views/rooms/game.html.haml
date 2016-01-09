@@ -1,22 +1,33 @@
 = stylesheet_link_tag 'map'
 
 #rooms_game
-#cover
-#hero_pick
-#player1_candidates.candidate_heros
-  %div 玩家1
-#player2_candidates.candidate_heros
-  %div 玩家2
-#status_screen
-  #round 回合：
-  玩家列表：
-  #players_list 
-#console
-%table#map
-  - @map.each_with_index do |line, y|
-    %tr{:pos => y}
-      - line.each_with_index do |e, x|
-        %td{:class => e, :pos => x}
+
+#game_pane
+  %table#map
+    - @map.each_with_index do |line, y|
+      %tr{:pos => y}
+        - line.each_with_index do |e, x|
+          %td{:class => e, :pos => x}
+  #console
+
+#controll_pane
+  #notification
+    #round 回合：
+    玩家列表：
+    #players_list 
+
+  #players_status
+    .player_info.pos1
+      .player_name
+    .player_info.pos2
+      .player_name
+
+#template
+  %script{:type => "text/html", :id => "hero_status_template"}
+    .hero_status{:class => "hero{{pos}}"}
+      = link_to "#" do 
+        %img{:src => "{{avatar}}"}
+        {{name}}
 
 #menu.hidden
   %a.attack{:href => "#"} Attack

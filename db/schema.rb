@@ -11,7 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151224092308) do
+ActiveRecord::Schema.define(version: 20160108034540) do
+
+  create_table "heros", force: :cascade do |t|
+    t.string   "name",          limit: 255, null: false
+    t.string   "avatar",        limit: 255
+    t.string   "description",   limit: 255
+    t.integer  "attack_type",   limit: 4,   null: false
+    t.integer  "attack_length", limit: 4,   null: false
+    t.integer  "attack_value",  limit: 4,   null: false
+    t.integer  "defense_type",  limit: 4,   null: false
+    t.integer  "defense_value", limit: 4,   null: false
+    t.integer  "speed",         limit: 4,   null: false
+    t.integer  "health",        limit: 4,   null: false
+    t.integer  "skill_id",      limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "skills", force: :cascade do |t|
+    t.string   "name",        limit: 255, null: false
+    t.string   "desctiption", limit: 255, null: false
+    t.string   "json_method", limit: 255, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "nick_name",  limit: 255,             null: false

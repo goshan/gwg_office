@@ -12,22 +12,41 @@
 
 #controll_pane
   #notification
-    #round 回合：
-    玩家列表：
-    #players_list 
+    .top
+      .avatar= image_tag ""
+      .info
+        .team
+        .name
+        .desc
+        .current_health= ""
+        .current_attack_length= ""
+        .current_speed= ""
+    .bottom
+      .current_attack= ""
+      .current_defense= ""
 
   #players_status
-    .player_info.pos1
-      .player_name
-    .player_info.pos2
-      .player_name
+    .player_info{:pos => 1, :player => 0}
+      .player_header
+        .player_name
+        = link_to "准备完毕", "#", :class => "ready hidden"
+    .player_info{:pos => 2, :player => 1}
+      .player_header
+        .player_name
+        = link_to "准备完毕", "#", :class => "ready hidden"
 
 #template
   %script{:type => "text/html", :id => "hero_status_template"}
-    .hero_status{:class => "hero{{pos}}"}
+    .hero_status{:pos => "{{pos}}"}
       = link_to "#" do 
         %img{:src => "{{avatar}}"}
-        {{name}}
+        %div= "{{name}}"
+        %div= "{{current_health}}/{{health}}"
+        %div= "技能: 未释放"
+  %script{:type => "text/html", :id => "hero_in_map_template"}
+    = link_to "#", :class => 'hero', :player => "{{player_id}}", :hero => "{{pos}}" do
+      %span.health= "{{current_health}}/{{health}}"
+      %img{:src => "{{avatar}}"}
 
 #menu.hidden
   %a.attack{:href => "#"} Attack

@@ -30,11 +30,11 @@ class GameEngin < Engin
 
 		def get_players(params)
 			players = []
-			@@room_game_engins[params[:room_id]].players.each do |key, player|
-				rate = player.win_count+player.loss_count == 0 ? 'new' : "#{player.win_count*1.00/(player.win_count+player.loss_count)*100}%"
-				players << {:id => player.id, :name => player.nick_name, :rate => rate}
+			game_engin = @@room_game_engins[params[:room_id]]
+			game_engin.players.each do |key, player|
+				players << player.to_json.merge({:self => player.id == params[:user_id]})
 			end
-			SocketUtil.send_message({:action => "get players list", :status => "deploying", :players => players}, params[:user_id])
+			SocketUtil.send_message({:action => "get players list", :status => game_engin.status, :players => players}, params[:user_id])
 		end
 
 		# show all heroes for picking, not used in 1.0 version
@@ -48,8 +48,25 @@ class GameEngin < Engin
 		end
 
 		def assign_heroes(params)
-			heroes = @@room_game_engins[params[:room_id]].assign_heroes params[:user_id]
-			SocketUtil.send_message({:action => "assign heroes", :status => "deploying", :heroes => heroes}, params[:user_id])
+			game_engin = @@room_game_engins[params[:room_id]]
+			heroes = game_engin.assign_heroes params[:user_id]
+			SocketUtil.send_message({:action => "assign heroes", :status => game_engin.status, :heroes => heroes}, params[:user_id])
+		end
+
+		def check_hero(params)
+			game_engin = @@room_game_engins[params[:room_id]]
+			hero = game_engin.check_hero params[:player_id].to_i, params[:hero_pos].to_i
+			SocketUtil.send_message({:action => "check hero info", :status => game_engin.status, :hero => hero.to_json(true)}, params[:user_id])
+		end
+
+		def deploy_hero(params)
+			game_engin = @@room_game_engins[params[:room_id]]
+			hero = game_engin.deploy_hero params[:user_id], params[:hero_pos].to_i, params[:x].to_i, params[:y].to_i
+			SocketUtil.send_message({:action => "player deployed hero", :status => game_engin.status, :hero => hero.to_json(true)}, params[:user_id])
+		end
+
+		def ready(params)
+			game_engin = @@room_game_engins[params[:room_id]].ready(params[:user_id])
 		end
 
 		def stop_game(params)

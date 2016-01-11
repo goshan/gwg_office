@@ -3,6 +3,9 @@ if ($('#rooms_game').length != 0){
 	init_player_id();
 	init_template();
 	open_socket('ws://0.0.0.0:4040');
+	on_hero_status_select();
+	on_hero_deploy();
+	on_ready();
 //	on_pick_hero();
 //	hero_pos_init();
 //	on_search_move_scope_or_attacked();

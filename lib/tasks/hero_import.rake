@@ -44,7 +44,7 @@ namespace :hero_import do
 			:attack_type => Hero.attack_types[:think], 
 			:attack_length => 1, 
 			:attack_value => 13, 
-			:defense_type => Hero.defense_types[:whether], 
+			:defense_type => Hero.defense_types[:weather], 
 			:defense_value => 10, 
 			:health => 90, 
 			:speed => 6

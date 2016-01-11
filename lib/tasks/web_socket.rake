@@ -15,6 +15,7 @@ namespace :web_socket do
 					rescue Exception => e
 						puts "============>> Exception <<============"
 						puts e.inspect
+						puts e.backtrace
 						response = JSON.generate({:status => "error", :error => "invalid request"})
 						ws.send(response)
 						puts "===============>> End <<==============="

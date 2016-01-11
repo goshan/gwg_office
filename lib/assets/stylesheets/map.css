@@ -25,6 +25,16 @@
 	padding: 5px;
 	border: 1px solid blue;
 	float: left;
+	font-size: 12px;
+}
+#notification .top{
+	height: 131px;
+}
+#notification .avatar{
+	float: left;
+}
+#notification .avatar img{
+	height: 125px;
 }
 
 #players_status{
@@ -38,6 +48,9 @@
 #players_status .player_info{
 	float: left;
 	width: 50%;
+}
+#players_status .player_name{
+	display: inline-block;
 }
 .hero_status{
 	float: left;
@@ -127,8 +140,11 @@ a.disabled{
 .T{
 	background-color: #eec659;
 }
-.O{
+.O, .A, .B{
 	background-color: #fafaf9;
+}
+.I{
+	background-color: #03c383;
 }
 
 /* mouse */
@@ -171,8 +187,8 @@ a.disabled{
 .health{
 	font-size: 11px;
 	position: absolute;
-	top: -10;
-	left: -5;
+	top: -20px;
+	left: -6px;
 	color: white;
 }
 .hero[player="1"] span{

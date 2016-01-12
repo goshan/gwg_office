@@ -66,7 +66,11 @@ class GameEngin < Engin
 		end
 
 		def ready(params)
-			game_engin = @@room_game_engins[params[:room_id]].ready(params[:user_id])
+			@@room_game_engins[params[:room_id]].ready(params[:user_id])
+		end
+
+		def move(params)
+			hero = @@room_game_engins[params[:room_id]].move_hero(params[:user_id], params[:hero_pos].to_i, params[:x].to_i, params[:y].to_i)
 		end
 
 		def stop_game(params)

@@ -17,7 +17,7 @@ class GameManager
 		
 		if @players.count == 2
 			self.status = :deploying
-			self.notice_message({:action => "get ready", :status => self.status})
+			self.notice_message({:action => "get ready"})
 		end
 		puts user.ready?
 
@@ -75,12 +75,22 @@ class GameManager
 		end
 		if all_ready
 			self.status = :gaming
+			self.turn = self.players.first.first
+			self.round = 1
 			players = []
 			@players.each do |id, p|
 				players << p.to_json(true)
 			end
-			self.notice_message({:action => "ready for fight", :status => self.status, :players => players})
+			self.notice_message({:action => "ready for fight", :players => players})
 		end
+	end
+
+	def move_hero(user_id, hero_pos, x, y)
+		player = @players[user_id]
+		hero = player.using_heroes[hero_pos]
+		hero.x = x
+		hero.y = y
+		self.notice_message({:action => "user moved hero", :hero => hero.to_json(true)})
 	end
 
 	def stop
@@ -89,6 +99,7 @@ class GameManager
 	end
 
 	def notice_message(json)
+		json.merge!({:status => self.status, :turn => self.turn})
 		players.each do |key, player|
 			SocketUtil.send_message json, player.id
 		end

@@ -6,13 +6,11 @@ if ($('#rooms_game').length != 0){
 	on_hero_status_select();
 	on_hero_deploy();
 	on_ready();
-//	on_pick_hero();
-//	hero_pos_init();
-//	on_search_move_scope_or_attacked();
-//	on_move();
+	on_search_move_scope_or_attack();
+	on_move();
 //	on_search_attack_scope();
 //	on_skill();
-//	on_standby();
+	on_standby();
 //	on_cancel();
 }
 

@@ -47,6 +47,9 @@
     = link_to "#", :class => 'hero', :player => "{{player_id}}", :hero => "{{pos}}" do
       %span.health= "{{current_health}}/{{health}}"
       %img{:src => "{{avatar}}"}
+      .speed.hidden= "{{current_speed}}"
+      .attack_length.hidden= "{{current_attack_length}}"
+      .attack_type.hidden= "{{attack_type}}"
 
 #menu.hidden
   %a.attack{:href => "#"} Attack

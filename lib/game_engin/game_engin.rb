@@ -70,7 +70,15 @@ class GameEngin < Engin
 		end
 
 		def move(params)
-			hero = @@room_game_engins[params[:room_id]].move_hero(params[:user_id], params[:hero_pos].to_i, params[:x].to_i, params[:y].to_i)
+			@@room_game_engins[params[:room_id]].move_hero(params[:user_id], params[:hero_pos].to_i, params[:x].to_i, params[:y].to_i)
+		end
+
+		def standby(params)
+			@@room_game_engins[params[:room_id]].standby_hero(params[:user_id], params[:hero_pos].to_i)
+		end
+
+		def attack(params)
+			@@room_game_engins[params[:room_id]].attack(params[:user_id], params[:attack_hero_pos].to_i, params[:defense_hero_pos].to_i)
 		end
 
 		def stop_game(params)

@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-	attr_accessor :is_ready, :using_heroes
+	attr_accessor :is_ready, :is_in_turn, :using_heroes
 
 	def self.auth_with_salt (id)
 		return nil if id == nil
@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
 	def init!
 		self.is_ready = false
+		self.is_in_turn = false
 		self.using_heroes = {}
 	end
 
@@ -18,6 +19,14 @@ class User < ActiveRecord::Base
 
 	def ready?
 		self.is_ready
+	end
+
+	def in_turn?
+		self.is_in_turn
+	end
+
+	def acting!
+		self.is_in_turn = true
 	end
 	
 	def heroes_json

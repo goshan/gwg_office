@@ -1,5 +1,5 @@
 class Hero < ActiveRecord::Base
-	attr_accessor :pos, :x, :y, :player_id, :current_health, :current_attack_value, :current_attack_length, :current_defense_value, :current_speed, :skill_used, :turn_acted
+	attr_accessor :pos, :x, :y, :player_id, :current_health, :current_attack_value, :current_attack_length, :current_defense_value, :current_speed, :skill_used, :turn_acted, :alive
 
 	enum :attack_type => {
 		:logic => 0, 
@@ -63,6 +63,7 @@ class Hero < ActiveRecord::Base
 		self.current_speed = self.speed
 		self.skill_used = false
 		self.turn_acted = false
+		self.alive = true
 	end
 
 	def attack_desc
@@ -71,6 +72,16 @@ class Hero < ActiveRecord::Base
 
 	def defense_desc
 		DEFENSE_DESC[self.defense_type.to_sym]
+	end
+
+	def acted!
+		self.turn_acted = true
+	end
+
+	def check_alive!
+		if self.current_health <= 0
+			self.alive = false
+		end
 	end
 
 	def to_json(status = nil)

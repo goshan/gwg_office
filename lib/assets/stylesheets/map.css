@@ -64,74 +64,7 @@
 .hero_status > a > img{
 	width: 100%;
 }
-#hero_pick{
-	position: absolute;
-	top: 150px;
-	left: 15px;
-	z-index: 100;
-	background-color: white;
-	width: 1250px;
-}
-#hero_pick a{
-	color: #638c0b;
-	display: inline-block;
-	text-decoration: none;
-	margin: 10px;
-	vertical-align: top;
-}
-a.disabled{
-	color: red;
-}
-#hero_pick a .avatar{
-	height: 50px;
-	width: 50px;
-}
-#hero_pick a .name{
-	display: inline-block;
-	font-size: 40px;
-	vertical-align: top;
-	margin-top: 5px;
-}
-#hero_pick a .info{
-	display: inline-block;
-	font-size: 18px;
-	vertical-align: top;
-	margin-top: 5px;
-	width: 150px;
-}
-#hero_pick a .skill{
-	margin-left: 60px;
-	font-size: 13px;
-}
-.candidate_heros{
-	position: absolute;
-	top: 15px;
-	z-index: 100;
-	background-color: #fafaf9;
-}
-#player1_candidates{
-	left: 300px;
-}
-#player2_candidates{
-	left: 750px;
-}
-.candidate_heros img{
-	height: 60px;
-	width: 60px;
-	margin: 5px;
-}
 
-
-#large_screen{
-	position: absolute;
-	top: 15px;
-	left: 15px;
-	z-index: 100;
-	background-color: #fafaf9;
-	display: block;
-	width: 249px;
-	height: 123px;
-}
 
 /* land */
 .X{
@@ -149,16 +82,16 @@ a.disabled{
 
 /* mouse */
 .wait_for_move{
-	background-color: red;
+	background-color: yellow;
 }
 .wait_for_attack{
-	background-color: red;
+	background-color: yellow;
 }
 .move_scope{
 	background-color: blue;
 }
 .attack_scope{
-	background-color: yellow;
+	background-color: red;
 }
 
 /* player */
@@ -169,11 +102,11 @@ a.disabled{
 	margin-left: 2px;
 }
 .hero[player="1"]{
-	background-color: green;
+	background-color: lightgreen;
 	position: relative;
 }
 .hero[player="2"]{
-	background-color: purple;
+	background-color: lightcoral;
 	position: relative;
 }
 .hero img{
@@ -183,7 +116,12 @@ a.disabled{
 	height: 17px;
 	width: 17px;
 }
-
+.moved[player="1"]{
+	background-color: green;
+}
+.moved[player="2"]{
+	background-color: purple;
+}
 .health{
 	font-size: 11px;
 	position: absolute;

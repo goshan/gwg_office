@@ -26,10 +26,10 @@ class GameManager
 
 	def assign_heroes(user_id)
 		player = @players[user_id]
-		Hero.all.each do |hero|
-			hero.picked! user_id, hero.id
-			player.using_heroes[hero.id] = hero
-		end
+#		Hero.all.each do |hero|
+#			hero.picked! user_id, hero.id
+#			player.using_heroes[hero.id] = hero
+#		end
 		# for there are only 4 heroes, using first hero twice
 		hero = Hero.first
 		hero.picked! user_id, 0
@@ -75,7 +75,9 @@ class GameManager
 		end
 		if all_ready
 			self.status = :gaming
-			self.turn = self.players.first.first
+			first_player = self.players.first
+			self.turn = first_player.first
+			first_player.second.acting!
 			self.round = 1
 			players = []
 			@players.each do |id, p|
@@ -90,7 +92,36 @@ class GameManager
 		hero = player.using_heroes[hero_pos]
 		hero.x = x
 		hero.y = y
-		self.notice_message({:action => "user moved hero", :hero => hero.to_json(true)})
+		self.notice_message({:action => "update hero", :hero => hero.to_json(true), :show_menu => true})
+	end
+
+	def standby_hero(user_id, hero_pos)
+		player = @players[user_id]
+		hero = player.using_heroes[hero_pos]
+		hero.acted!
+		self.notice_message({:action => "update hero", :hero => hero.to_json(true)})
+	end
+
+	def attack(attack_player_id, attack_hero_pos, defense_hero_pos)
+		attacker = @players[attack_player_id].using_heroes[attack_hero_pos]
+		defenser = nil
+		@players.each do |player_id, player|
+			unless player_id == attack_player_id
+				defenser = player.using_heroes[defense_hero_pos]
+				break
+			end
+		end
+		# check attack scope
+		if attacker.current_attack_length < (attacker.x-defenser.x).abs + (attacker.y-defenser.y).abs
+			self.notice_message({:status => "error", :error => "out of attack scope"})
+			return
+		end
+		damage = Hero.damage attacker, defenser
+		defenser.current_health -= damage
+		defenser.check_alive!
+		attacker.acted!
+		self.notice_message({:action => "update hero", :hero => attacker.to_json(true)})
+		self.notice_message({:action => "update hero", :hero => defenser.to_json(true)})
 	end
 
 	def stop

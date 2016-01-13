@@ -44,7 +44,7 @@
         %div= "{{current_health}}/{{health}}"
         %div= "技能: 未释放"
   %script{:type => "text/html", :id => "hero_in_map_template"}
-    = link_to "#", :class => 'hero', :player => "{{player_id}}", :hero => "{{pos}}" do
+    = link_to "#", :class => "hero {{moved_class}}", :player => "{{player_id}}", :hero => "{{pos}}" do
       %span.health= "{{current_health}}/{{health}}"
       %img{:src => "{{avatar}}"}
       .speed.hidden= "{{current_speed}}"

@@ -28,6 +28,43 @@ class User < ActiveRecord::Base
 	def acting!
 		self.is_in_turn = true
 	end
+
+	def check_turn_over!
+		self.using_heroes.each do |hero_id, hero|
+			if !hero.turn_acted
+				self.is_in_turn = true
+				return
+			end
+		end
+		self.is_in_turn = false
+	end
+
+	def refresh_hero_act!
+		self.using_heroes.each do |hero_id, hero|
+			if hero.alive
+				hero.turn_acted = false
+			end
+		end
+	end
+
+	def lose?
+		self.using_heroes.each do |hero_id, hero|
+			if hero.alive
+				return false
+			end
+		end
+		return true
+	end
+
+	def win_game
+		self.win_count += 1
+		self.save!
+	end
+
+	def lose_game
+		self.loss_count += 1
+		self.save!
+	end
 	
 	def heroes_json
 		self.using_heroes.values.map{|e| e.to_json(true)}

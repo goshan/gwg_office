@@ -81,6 +81,7 @@ class Hero < ActiveRecord::Base
 	def check_alive!
 		if self.current_health <= 0
 			self.alive = false
+			self.turn_acted = true
 		end
 	end
 
@@ -113,7 +114,8 @@ class Hero < ActiveRecord::Base
 				:defense_desc => self.defense_desc,
 				:current_speed => self.current_speed, 
 				:skill_used => self.skill_used, 
-				:turn_acted => self.turn_acted
+				:turn_acted => self.turn_acted,
+				:alive => self.alive
 			})
 		end
 

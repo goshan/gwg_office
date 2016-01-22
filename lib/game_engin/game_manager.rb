@@ -75,15 +75,15 @@ class GameManager
 		end
 		if all_ready
 			self.status = :gaming
-			first_player = self.players.first
-			self.turn = first_player.first
-			first_player.second.acting!
-			self.round = 1
 			players = []
 			@players.each do |id, p|
 				players << p.to_json(true)
 			end
 			self.notice_message({:action => "ready for fight", :players => players})
+
+			first_player = self.players.values[0]
+			second_player = self.players.values[1]
+			self.change_turn first_player, second_player
 		end
 	end
 
@@ -100,17 +100,33 @@ class GameManager
 		hero = player.using_heroes[hero_pos]
 		hero.acted!
 		self.notice_message({:action => "update hero", :hero => hero.to_json(true)})
+		
+		player.check_turn_over!
+		# change turn
+		unless player.is_in_turn
+			other = nil
+			@players.each do |player_id, player|
+				unless player_id == user_id
+					other = player
+					break
+				end
+			end
+			self.change_turn other, player
+		end
 	end
 
 	def attack(attack_player_id, attack_hero_pos, defense_hero_pos)
-		attacker = @players[attack_player_id].using_heroes[attack_hero_pos]
-		defenser = nil
+		attack_player = @players[attack_player_id]
+		defense_player = nil
 		@players.each do |player_id, player|
 			unless player_id == attack_player_id
-				defenser = player.using_heroes[defense_hero_pos]
+				defense_player = player
 				break
 			end
 		end
+		attacker = attack_player.using_heroes[attack_hero_pos]
+		defenser = defense_player.using_heroes[defense_hero_pos]
+		
 		# check attack scope
 		if attacker.current_attack_length < (attacker.x-defenser.x).abs + (attacker.y-defenser.y).abs
 			self.notice_message({:status => "error", :error => "out of attack scope"})
@@ -118,10 +134,58 @@ class GameManager
 		end
 		damage = Hero.damage attacker, defenser
 		defenser.current_health -= damage
+		self.notice_message({:action => "notice", :msg => "#{attack_player.nick_name}的#{attacker.name}攻击#{defense_player.nick_name}的#{defenser.name}造成#{damage}点伤害"})
 		defenser.check_alive!
+		unless defenser.alive
+			self.notice_message({:action => "notice", :msg => "#{defense_player.nick_name}的#{defenser.name}阵亡"})
+		end
 		attacker.acted!
 		self.notice_message({:action => "update hero", :hero => attacker.to_json(true)})
 		self.notice_message({:action => "update hero", :hero => defenser.to_json(true)})
+
+		# check game over
+		if defense_player.lose?
+			self.game_over attack_player, defense_player
+			return
+		end
+
+		attack_player.check_turn_over!
+		# change turn
+		unless attack_player.is_in_turn
+			self.change_turn defense_player, attack_player
+		end
+	end
+
+	def change_turn(acting_player, acted_player)
+		self.round += 1
+		acting_player.refresh_hero_act!
+		acting_player.is_in_turn = true
+		acted_player.refresh_hero_act!
+		acted_player.is_in_turn = false
+		self.turn = acting_player.id
+
+		acting_player.using_heroes.each do |hero_id, hero|
+			if hero.alive
+				self.notice_message({:action => "update hero", :hero => hero.to_json(true), :show_menu => false})
+			end
+		end
+		acted_player.using_heroes.each do |hero_id, hero|
+			if hero.alive
+				self.notice_message({:action => "update hero", :hero => hero.to_json(true), :show_menu => false})
+			end
+		end
+
+		msg = self.round == 1 ? "首先由#{acting_player.nick_name}先行动" : "#{acted_player.nick_name}的回合结束轮到#{acting_player.nick_name}行动"
+		self.notice_message({:action => "notice", :msg => msg})
+		SocketUtil.send_message({:action => "alert", :msg => "请选择英雄行动"}, acting_player.id)
+	end
+
+	def game_over(winner, loser)
+		winner.win_game
+		loser.lose_game
+		SocketUtil.send_message({:action => "win", :msg => ""}, winner.id)
+		SocketUtil.send_message({:action => "lose", :msg => ""}, loser.id)
+		self.stop
 	end
 
 	def stop

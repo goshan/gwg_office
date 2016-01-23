@@ -25,10 +25,10 @@ class GameManager
 
 	def assign_heroes(user_id)
 		player = @players[user_id]
-#		Hero.all.each do |hero|
-#			hero.picked! user_id, hero.id
-#			player.using_heroes[hero.id] = hero
-#		end
+		Hero.all.each do |hero|
+			hero.picked! user_id, hero.id
+			player.using_heroes[hero.id] = hero
+		end
 		# for there are only 4 heroes, using first hero twice
 		hero = Hero.first
 		hero.picked! user_id, 0

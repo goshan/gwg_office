@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+	include SessionsHelper
+
 	skip_before_filter :check_signed_in, :only => [:new, :create]
 	def new
 		@user = User.new
@@ -9,9 +11,8 @@ class UsersController < ApplicationController
 		unless @user
 			@user = User.new user_params
 			@user.save!
-
-			sign_in @user
 		end
+		sign_in @user
 
 		redirect_to root_path
 	end

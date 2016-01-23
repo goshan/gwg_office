@@ -9,7 +9,9 @@
 
 <%= yield %>
 
-<div id="socket_domain" class="hidden"><%= request.domain %></div>
+<%- socket_domain = request.base_url.sub "http://", "ws://" %>
+<%- socket_domain = socket_domain.sub ":3000", ":4040" %>
+<div id="socket_domain" class="hidden"><%= socket_domain %></div>
 <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 </body>
 </html>

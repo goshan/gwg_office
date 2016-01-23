@@ -19,7 +19,6 @@ class GameManager
 			self.status = :deploying
 			self.notice_message({:action => "get ready"})
 		end
-		puts user.ready?
 
 		return @players.count > 2 ? false : true
 	end

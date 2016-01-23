@@ -1,5 +1,6 @@
 if ($("#rooms_show").length != 0){
-	var socket = new WebSocket("ws://0.0.0.0:4040");
+	var domain = $('#socket_domain').text();
+	var socket = new WebSocket('ws://'+domain+':4040');
 	socket.onmessage = function(res){ 
 		console.log(res.data);
 

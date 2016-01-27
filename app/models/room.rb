@@ -1,4 +1,4 @@
-class Room < CacheModel
+class Room < CacheRecord
 	attr_accessor :id, :name, :status, :players, :sockets
 
 	STATUS_WAITING = "waiting"

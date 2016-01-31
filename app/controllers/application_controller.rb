@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
-  include SessionsHelper
+  include EasyLogin::Session
+  helper_method EasyLogin.helper_method
   
   before_filter :check_signed_in
 

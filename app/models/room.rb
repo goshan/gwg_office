@@ -1,5 +1,5 @@
 class Room < CacheRecord
-	attr_accessor :id, :name, :status, :players, :sockets
+	attr_accessor :id, :name, :status, :players, :sockets, :game_id
 
 	STATUS_WAITING = "waiting"
 	STATUS_GAMING = "gaming"
@@ -68,7 +68,7 @@ class Room < CacheRecord
 
 	# for cache transport func
 	def to_cache
-		JSON.generate({:id => @id, :name => @name, :status => @status, :players => @players.map{|p| p.id}})
+		JSON.generate({:id => @id, :name => @name, :status => @status, :game_id => @game_id, :players => @players.map{|p| p.id}})
 	end
 
 	def self.from_cache(str)
@@ -80,6 +80,7 @@ class Room < CacheRecord
 		room.status = json[:status]
 		room.players = players
 		room.sockets = json[:sockets]
+		room.game_id = json[:game_id]
 		room
 	end
 end

@@ -41,6 +41,7 @@ gem 'haml-rails'
 gem 'em-websocket'
 gem 'cache_driver'
 gem 'easy_login'
+gem 'websocket-controller', :git => "https://github.com/goshan/websocket-controller"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

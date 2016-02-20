@@ -1,5 +1,4 @@
 class UsersController < ApplicationController
-	include SessionsHelper
 
 	skip_before_filter :check_signed_in, :only => [:new, :create]
 	def new

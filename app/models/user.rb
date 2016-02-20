@@ -75,7 +75,9 @@ class User < ActiveRecord::Base
 		json = {
 			:id => self.id, 
 			:name => self.nick_name, 
-			:rate => rate
+			:rate => rate,
+			:is_ready => self.is_ready, 
+			:is_in_turn => self.is_in_turn
 		}
 		if with_hero
 			json.merge!({:heroes => self.using_heroes.values.map{|e| e.to_json(true)}})

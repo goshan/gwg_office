@@ -1,11 +1,48 @@
-class GameManager
-	attr_accessor :players, :status, :turn, :round
+class Game < CacheRecord
+	attr_accessor :id, :players, :status, :turn, :round
 
 	def initialize
 		@status = :waiting
 		@players = {}
 		@turn = 0
 		@round = 0
+	end
+
+	def to_cache
+		JSON.generate({:id => @id, :status => @status, :turn => @turn, :round => @round, :players => @players.values.map{|p| p.to_json(true)}})
+	end
+
+	def self.from_cache(str)
+		json = JSON.parse str, {:symbolize_names => true}
+		game = Game.new
+		game.id = json[:id]
+		game.status = json[:status]
+		game.turn = json[:turn]
+		game.round = json[:round]
+		json[:players].each do |p|
+			user = User.find_by_id p[:id]
+			user.is_ready = p[:is_ready]
+			user.is_in_turn = p[:is_in_turn]
+			user.using_heroes = {}
+			p[:heroes].each do |h|
+				hero = Hero.find_by_id h[:id]
+				hero.pos = h[:pos]
+				hero.x = h[:x]
+				hero.y = h[:y]
+				hero.player_id = h[:player_id]
+				hero.current_health = h[:current_health]
+				hero.current_attack_value = h[:current_attack_value]
+				hero.current_attack_length = h[:current_attack_length]
+				hero.current_defense_value = h[:current_defense_value]
+				hero.current_speed = h[:current_speed]
+				hero.skill_used = h[:skill_used]
+				hero.turn_acted = h[:turn_acted]
+				hero.alive = h[:alive]
+				user.using_heroes[hero.id] = hero
+			end
+			game.players[user.id] = user
+		end
+		game
 	end
 
 	def join(user_id)
@@ -17,8 +54,9 @@ class GameManager
 		
 		if @players.count == 2
 			self.status = :deploying
-			self.notice_message({:action => "get ready"})
 		end
+
+		self.save!
 
 		return @players.count > 2 ? false : true
 	end
@@ -190,12 +228,5 @@ class GameManager
 	def stop
 		@status = :end
 		@players = {}
-	end
-
-	def notice_message(json)
-		json.merge!({:status => self.status, :turn => self.turn})
-		players.each do |key, player|
-			SocketUtil.send_message json, player.id
-		end
 	end
 end

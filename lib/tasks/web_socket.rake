@@ -11,7 +11,7 @@ namespace :web_socket do
 				ws.onmessage do |msg|
 					puts "user with signature #{ws.signature} sent message #{msg}"
 					begin
-						SocketUtil.parse_message msg, ws
+						WebSocket::Parser.parse_message msg, ws
 					rescue Exception => e
 						puts "============>> Exception <<============"
 						puts e.inspect
@@ -23,7 +23,7 @@ namespace :web_socket do
 				end
 
 				ws.onclose do 
-					SocketUtil.close_socket ws
+					WebSocket::Parser.close_socket ws
 					puts "user with signature #{ws.signature} disconnected"
 				end
 			end

@@ -21,6 +21,17 @@ class User < ActiveRecord::Base
 		self.is_ready
 	end
 
+	def all_heroes_deployed?
+		all_deployed = true
+		self.using_heroes.each do |hero_pos, hero|
+			unless hero.x && hero.y
+				all_deployed = false
+				break;
+			end
+		end
+		all_deployed
+	end	
+
 	def in_turn?
 		self.is_in_turn
 	end
@@ -80,7 +91,7 @@ class User < ActiveRecord::Base
 			:is_in_turn => self.is_in_turn
 		}
 		if with_hero
-			json.merge!({:heroes => self.using_heroes.values.map{|e| e.to_json(true)}})
+			json.merge!({:heroes => Hash[self.using_heroes.map{|k, v| [k,v.to_json(true)]}]})
 		end
 		json
 	end

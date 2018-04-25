@@ -1,24 +1,24 @@
 if ($("#rooms_index").length != 0){
-	var domain = $('#socket_domain').text();
-	var socket = new WebSocket(domain);
-	socket.onmessage = function(res){ 
-		console.log(res.data);
+  var domain = $('#socket_domain').text();
+  var socket = new WebSocket(domain);
+  socket.onmessage = function(res){ 
+    console.log(res.data);
 
-		json = JSON.parse(res.data);
-		if (json['action'] == "user enter room"){
-			window.location.reload();
-		}
-		else if (json['action'] == "user leave room"){
-			window.location.reload();
-		}
-		else if (json['action' == "user start game"]){
-			window.location.reload();
-		}
-	}
+    json = JSON.parse(res.data);
+    if (json['action'] == "user enter room"){
+      window.location.reload();
+    }
+    else if (json['action'] == "user leave room"){
+      window.location.reload();
+    }
+    else if (json['action' == "user start game"]){
+      window.location.reload();
+    }
+  }
 
-	socket.onopen = function(event){ 
-		var current_user_id = $('#current_user_id').text();
-		var request = JSON.stringify({engin: "socket", action: "register", user_id: current_user_id});
-		socket.send(request);
-	}
+  socket.onopen = function(event){ 
+    var current_user_id = $('#current_user_id').text();
+    var request = JSON.stringify({engin: "socket", action: "register", user_id: current_user_id});
+    socket.send(request);
+  }
 }

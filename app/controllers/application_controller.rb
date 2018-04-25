@@ -9,6 +9,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   def check_signed_in
-	  return redirect_to sign_up_path unless signed_in?
+    return redirect_to sign_up_path unless signed_in?
   end
 end

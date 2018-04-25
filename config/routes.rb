@@ -16,11 +16,11 @@ Rails.application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
   resources :rooms do
-	  member do 
-		  get 'join'
-		  get 'unjoin'
-		  get 'game'
-	  end
+    member do 
+      get 'join'
+      get 'unjoin'
+      get 'game'
+    end
   end
 
   # Example resource route with options:
